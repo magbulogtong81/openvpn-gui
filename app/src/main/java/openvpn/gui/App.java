@@ -19,7 +19,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class App extends javax.swing.JFrame {
 
-
     ExecuteCommand exec;
 
     /**
@@ -30,7 +29,7 @@ public class App extends javax.swing.JFrame {
         initSetup();
         osDetectLbl.setText(new ExecuteCommand().detecOS());
         sessionListTxt.setText(sessionList());
-        
+
     }
 
     public void initSetup() {
@@ -45,7 +44,7 @@ public class App extends javax.swing.JFrame {
         exec = new ExecuteCommand();
         try {
 
-            exec.executeCommand(exec.detectPath()+" sessions-list");
+            exec.executeCommand(exec.detectPath() + " sessions-list");
             returnVal = exec.getResult();
 
         } catch (IOException | InterruptedException | ExecutionException | TimeoutException ex) {
@@ -94,9 +93,9 @@ public class App extends javax.swing.JFrame {
 
         osDetectLbl.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
         osDetectLbl.setForeground(new java.awt.Color(255, 255, 255));
-        osDetectLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        osDetectLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         osDetectLbl.setText("Win? LInux?");
-        getContentPane().add(osDetectLbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 93, 30));
+        getContentPane().add(osDetectLbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 93, 30));
 
         detectLbl.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
         detectLbl.setForeground(new java.awt.Color(255, 255, 255));
@@ -229,7 +228,7 @@ public class App extends javax.swing.JFrame {
         } else {
             exec = new ExecuteCommand();
             try {
-                exec.executeCommand(exec.detectPath()+" session-manage --config "
+                exec.executeCommand(exec.detectPath() + " session-manage --config "
                         + "$(openvpn3 sessions-list | grep -Eo \"/...*.ovpn\") --disconnect");
                 String result = exec.getResult();
                 ExecLog log = new ExecLog();
@@ -253,7 +252,7 @@ public class App extends javax.swing.JFrame {
         } else {
             exec = new ExecuteCommand();
             try {
-                exec.executeCommand(exec.detectPath()+" session-manage --config "
+                exec.executeCommand(exec.detectPath() + " session-manage --config "
                         + "$(openvpn3 sessions-list | grep -Eo \"/...*.ovpn\") --restart");
                 String result = exec.getResult();
                 ExecLog log = new ExecLog();
@@ -270,16 +269,20 @@ public class App extends javax.swing.JFrame {
 
     private void rtsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtsBtnActionPerformed
         // TODO add your handling code here:
-        ExecLog log = new ExecLog();
-        ExecuteCommand exec = new ExecuteCommand();
-        
-        String command = exec.detectPath()+ " session-stats --config $(openvpn3 sessions-list | grep -Eo \"/...*.ovpn\")";
-        log.setloopExec(command);
-        log.setVisible(true);
-        Thread tt = new Thread(log);
-        tt.start();
-        if (!log.isDisplayable()){
-            tt.interrupt();
+        if (sessionList().equals("No sessions available\n")) {
+            JOptionPane.showMessageDialog(null, "Not connected yet", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            ExecLog log = new ExecLog();
+            ExecuteCommand exec = new ExecuteCommand();
+
+            String command = exec.detectPath() + " session-stats --config $(openvpn3 sessions-list | grep -Eo \"/...*.ovpn\")";
+            log.setloopExec(command);
+            log.setVisible(true);
+            Thread tt = new Thread(log);
+            tt.start();
+            if (!log.isDisplayable()) {
+                tt.interrupt();
+            }
         }
     }//GEN-LAST:event_rtsBtnActionPerformed
 
@@ -304,7 +307,7 @@ public class App extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        
+
         //</editor-fold>
         //</editor-fold>
 
